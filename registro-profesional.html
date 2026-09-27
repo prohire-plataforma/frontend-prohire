@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PROHIRE - Registro Profesional</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="modo-tarjeta">
+    <main class="pantalla">
+        <div class="header-interno">
+            <img src="img/logo.jpg" alt="Logo" class="logo-pequeno">
+            <h2 class="marca-pequena">PROHIRE</h2>
+        </div>
+        
+        <h3 class="titulo-seccion">Registro Profesional</h3>
+        
+        <form class="formulario" id="form-registro-profesional">
+            <input type="text" id="nombre-prof" placeholder="Nombre completo" required>
+            <input type="email" id="correo-prof" placeholder="Correo electrónico" required>
+            <input type="tel" id="telefono-prof" placeholder="Teléfono de contacto" required>
+            
+<!-- SELECTOR MASIVO DE PROFESIÓN / CARGO / OFICIO -->
+            <select id="profesion-prof" required style="padding: 12px; border-radius: 8px; border: 1.5px solid #ddd; outline: none; margin-bottom: 12px; width: 100%;" onchange="verificarProfesion(this)">
+                <option value="" disabled selected>Selecciona tu Profesión u Oficio principal...</option>
+                
+                <optgroup label="Tecnología y Sistemas">
+                    <option value="Desarrollador Full-Stack">Desarrollador Full-Stack</option>
+                    <option value="Desarrollador Frontend">Desarrollador Frontend</option>
+                    <option value="Desarrollador Backend">Desarrollador Backend</option>
+                    <option value="Ingeniero de Sistemas">Ingeniero de Sistemas / Software</option>
+                    <option value="Analista de Datos / Data Science">Analista de Datos / Data Science</option>
+                    <option value="Soporte IT / Helpdesk">Soporte Técnico IT / Mesa de Ayuda</option>
+                    <option value="Diseñador UI/UX">Diseñador UI/UX / Multimedia</option>
+                    <option value="Administrador de Bases de Datos">Administrador de Bases de Datos (DBA)</option>
+                </optgroup>
+
+                <optgroup label="Operaciones, Logística y Trabajo Manual">
+                    <option value="Operario de Producción / Logística">Operario de Producción y Carga (Armado de Bultos)</option>
+                    <option value="Bodeguero / Almacenista">Bodeguero, Almacenista e Inventarios</option>
+                    <option value="Conductor / Repartidor">Conductor (Licencias C1/C2/C3) y Repartidor</option>
+                    <option value="Mecánico Industrial / Automotriz">Mecánico Industrial y Automotriz</option>
+                    <option value="Electricista / Técnicos de Mantenimiento">Electricista y Técnico de Mantenimiento</option>
+                    <option value="Soldador / Metalmecánica">Soldador y Operario Metalmecánico</option>
+                </optgroup>
+
+                <optgroup label="Administración, Finanzas y Legal">
+                    <option value="Administrador de Empresas">Administrador de Empresas / Negocios</option>
+                    <option value="Contador / Auxiliar Contable">Contador Público y Auxiliar Contable</option>
+                    <option value="Analista de Recursos Humanos / Talento Humano">Analista de Talento Humano y Selección</option>
+                    <option value="Asistente Administrativo / Secretariado">Asistente Administrativo y Secretariado</option>
+                    <option value="Abogado / Asesor Jurídico">Abogado y Asesor Jurídico</option>
+                </optgroup>
+
+                <optgroup label="Comercial, Ventas y Atención al Cliente">
+                    <option value="Asesor Comercial / Ventas">Asesor Comercial y Ejecutivo de Ventas</option>
+                    <option value="Atención al Cliente / Call Center">Atención al Cliente y Call Center</option>
+                    <option value="Gerente de Ventas / Account Manager">Gerente de Cuentas y Comercial</option>
+                    <option value="Mercad Tenedor / Impulsador">Mercadista e Impulsador de Ventas</option>
+                </optgroup>
+
+                <optgroup label="Salud, Educación y Servicios">
+                    <option value="Enfermero / Auxiliar de Enfermería">Enfermero y Auxiliar en Salud</option>
+                    <option value="Médico / Especialista">Médico General o Especialista</option>
+                    <option value="Docente / Profesor">Docente, Tutor y Profesor</option>
+                    <option value="Chef / Cocinero / Ayudante de Cocina">Chef, Cocinero y Personal de Gastronomía</option>
+                    <option value="Operario de Aseo y Servicios Generales">Operario de Aseo, Limpieza y Servicios Generales</option>
+                    <option value="Vigilante / Guardas de Seguridad">Guarda de Seguridad y Vigía</option>
+                </optgroup>
+
+                <option value="OTRO">Otro Cargo u Oficio (Especificar)</option>
+            </select>
+            <input type="text" id="profesion-prof-otro" placeholder="Escribe tu profesión u oficio..." style="display: none; padding: 12px; border-radius: 8px; border: 1.5px solid #ddd; margin-bottom: 12px; width: 100%;">
+            <!-- CAJA DEL PIN -->
+            <input type="text" id="pin-prof" placeholder="Crea un PIN de seguridad (4 números)" maxlength="4" pattern="\d{4}" title="Debe ser exactamente de 4 números" style="background-color: #fcf3ff; border-color: #8A2BE2;" required>
+            
+            <input type="password" id="pass-prof" placeholder="Contraseña (mín. 8 carac., Mayús, Núm, Símbolo)" required>
+            <button type="submit" class="btn-morado-link">REGISTRARME</button>
+        </form>
+        
+        <a href="seleccion.html" class="btn-volver">← Volver</a>
+    </main>
+
+    <script>
+        function verificarProfesion(select) {
+            const inputOtro = document.getElementById('profesion-prof-otro');
+            if (select.value === 'OTRO') {
+                inputOtro.style.display = 'block';
+                inputOtro.required = true;
+            } else {
+                inputOtro.style.display = 'none';
+                inputOtro.required = false;
+                inputOtro.value = '';
+            }
+        }
+    </script>
+    <script src="global.js"></script>
+    <script src="auth.js"></script>
+</body>
+</html>

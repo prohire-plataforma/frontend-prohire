@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PROHIRE - Panel Empresa</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header class="header-top">
+        <div style="display: flex; align-items: center; gap: 20px;">
+            <h2 class="logo-limpio">PROHIRE <span class="tag-rol" style="background: #2ecc71;">Empresa</span></h2>
+        </div>
+        
+        <div class="perfil-dropdown-contenedor">
+            <div class="avatar-trigger" style="position: relative; cursor: pointer;" title="Haz clic para cambiar el logotipo de la empresa">
+                <span id="nombre-mini-empresa">Cargando...</span>
+                
+                <!-- AVATAR DE EMPRESA CON INPUT INVISIBLE PARA CAMBIO RÁPIDO DE LOGO (Soporte webp, png, jpg) -->
+                <div style="position: relative; display: inline-block;">
+                    <img src="https://cdn-icons-png.flaticon.com/512/149/149071.png" alt="Perfil" class="avatar-redondo" id="foto-perfil-mini-empresa" style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover;">
+                    <input type="file" id="input-logo-empresa" accept="image/png, image/jpeg, image/webp" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; opacity: 0; cursor: pointer;" title="Cambiar logotipo">
+                </div>
+            </div>
+            
+            <div class="dropdown-menu">
+                <div class="dropdown-info">
+                    <strong id="dropdown-nombre-empresa">Usuario</strong>
+                    <span id="dropdown-email-empresa">correo@prohire.com</span>
+                </div>
+                <hr class="dropdown-divider">
+                <button onclick="mostrarSeccionEmpresa('perfil')" class="dropdown-item">⚙️ Mi Perfil</button>
+                <button onclick="cerrarSesion()" class="dropdown-item salir">🚪 Cerrar Sesión</button>
+            </div>
+        </div>
+    </header>
+
+    <div class="layout-principal">
+        <aside class="menu-social">
+            <nav>
+                <a href="#" class="link-menu activo" id="btn-vacantes" onclick="mostrarSeccionEmpresa('vacantes')">📢 Mis Vacantes</a>
+                <a href="#" class="link-menu" id="btn-postulantes" onclick="mostrarSeccionEmpresa('postulantes')">👥 Ver Candidatos</a>
+                <a href="#" class="link-menu" id="btn-publicar" onclick="mostrarSeccionEmpresa('publicar')">➕ Publicar Oferta</a>
+                <a href="#" class="link-menu" id="btn-perfil" onclick="mostrarSeccionEmpresa('perfil')">⚙️ Mi Perfil</a>
+                <hr style="margin: 10px 0; border: 0; border-top: 1px solid #ddd;">
+                <a href="index.html" class="link-menu">🚪 Cerrar Sesión</a>
+            </nav>
+        </aside>
+
+        <main class="muro-ofertas">
+            <section id="sec-vacantes">
+                <h3>Vacantes Publicadas</h3>
+                <div id="mis-vacantes-lista"></div>
+            </section>
+
+            <section id="sec-postulantes" style="display: none;">
+                <h3>Candidatos Postulados</h3>
+                <div class="post-empleo" style="padding: 0; overflow-x: auto;">
+                    <table style="width: 100%; border-collapse: collapse;">
+                        <thead style="background: #f8f9fa;">
+                            <tr>
+                                <th style="padding: 12px; text-align: left; border-bottom: 2px solid #ddd;">Candidato</th>
+                                <th style="padding: 12px; text-align: left; border-bottom: 2px solid #ddd;">Cargo</th>
+                                <th style="padding: 12px; text-align: center; border-bottom: 2px solid #ddd;">Hoja de Vida</th>
+                                <th style="padding: 12px; text-align: left; border-bottom: 2px solid #ddd;">Estado y Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tabla-postulantes-empresa"></tbody>
+                    </table>
+                </div>
+            </section>
+
+            <section id="sec-publicar" style="display: none;">
+                <h3>Publicar Nueva Oferta</h3>
+                <form id="form-publicar-vacante" class="formulario post-empleo">
+                    <input type="text" id="vacante-cargo" placeholder="Nombre del Cargo (Ej: Desarrollador Frontend)" required style="padding: 14px; border-radius: 10px; border: 1.5px solid #e1e4e8;">
+                    <input type="text" id="vacante-salario" placeholder="Sueldo ofrecido (Ej: $2.500.000 o A convenir)" required style="padding: 14px; border-radius: 10px; border: 1.5px solid #e1e4e8;">
+                    
+                    <div style="display: flex; gap: 10px;">
+                        <select id="modalidad-vacante" required style="width: 50%; padding: 14px; border-radius: 10px; border: 1.5px solid #e1e4e8; outline: none;">
+                            <option value="" disabled selected>Modalidad...</option>
+                            <option value="Presencial">Presencial</option>
+                            <option value="Virtual">Virtual (Remoto)</option>
+                            <option value="Híbrido">Híbrido</option>
+                        </select>
+                        <select id="contrato-vacante" required style="width: 50%; padding: 14px; border-radius: 10px; border: 1.5px solid #e1e4e8; outline: none;">
+                            <option value="" disabled selected>Tipo de Contrato...</option>
+                            <option value="Término Indefinido">Término Indefinido</option>
+                            <option value="Término Fijo">Término Fijo</option>
+                            <option value="Prestación de Servicios">Prestación de Servicios</option>
+                        </select>
+                    </div>
+
+                    <!-- SELECTOR NORMALIZADO DE ZONA / UBICACIÓN -->
+                    <select id="ubicacion-vacante" required style="width: 100%; padding: 14px; border-radius: 10px; border: 1.5px solid #e1e4e8; outline: none; margin-bottom: 10px;" onchange="verificarZonaVacante(this)">
+                        <option value="" disabled selected>Selecciona la Zona / Ubicación...</option>
+                        <option value="Bogotá D.C.">Bogotá D.C.</option>
+                        <option value="Medellín">Medellín</option>
+                        <option value="Cali">Cali</option>
+                        <option value="Barranquilla">Barranquilla</option>
+                        <option value="Bucaramanga">Bucaramanga</option>
+                        <option value="Remoto (Nacional / Internacional)">Remoto (Nacional / Internacional)</option>
+                        <option value="OTRO">Otro (Especificar)</option>
+                    </select>
+                    <input type="text" id="ubicacion-vacante-otro" placeholder="Especifica la ubicación..." style="display: none; padding: 14px; border-radius: 10px; border: 1.5px solid #e1e4e8; margin-bottom: 10px;">
+
+                    <textarea id="vacante-desc" placeholder="Descripción detallada del puesto..." required style="height: 120px; padding: 14px; border-radius: 10px; border: 1.5px solid #e1e4e8;"></textarea>
+                    
+                    <button type="submit" class="btn-morado-link">LANZAR VACANTE</button>
+                </form>
+            </section>
+
+            <!-- SECCIÓN: PERFIL EMPRESA -->
+            <section id="sec-perfil-empresa" style="display:none;">
+                <h3 style="margin-bottom:15px;">Datos de la Empresa</h3>
+                <form id="form-perfil-empresa" class="post-empleo formulario">
+                    <p style="font-size: 13px; color: #666; margin-bottom: 10px;">Actualiza el correo y contraseña de acceso de tu empresa.</p>
+                    
+                    <label>Correo Electrónico:</label>
+                    <input type="email" id="perfil-email-empresa" placeholder="Correo actual" required>
+                    
+                    <label>Cambiar Contraseña (Opcional):</label>
+                    <input type="text" id="perfil-password-empresa" placeholder="Escribe aquí tu nueva clave (mín. 8 caracteres, Mayús, Núm, Símbolo)">
+        
+                    <label>Teléfono de la empresa:</label>
+                    <input type="tel" id="perfil-telefono-empresa" placeholder="Teléfono de contacto">
+        
+                    <button type="submit" class="btn-morado-link" style="margin-top: 15px;">GUARDAR CAMBIOS</button>
+                </form>
+            </section>
+
+        </main>
+    </div>
+
+    <script>
+        function verificarZonaVacante(select) {
+            const inputOtro = document.getElementById('ubicacion-vacante-otro');
+            if (select.value === 'OTRO') {
+                inputOtro.style.display = 'block';
+                inputOtro.required = true;
+            } else {
+                inputOtro.style.display = 'none';
+                inputOtro.required = false;
+                inputOtro.value = '';
+            }
+        }
+    </script>
+    <script src="global.js?v=12"></script>
+    <script src="empresa.js?v=12"></script>
+</body>
+</html>

@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PROHIRE - Recuperar Contraseña</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="modo-tarjeta">
+    <main class="pantalla">
+        <div class="header-interno">
+            <img src="img/logo.jpg" alt="Logo PROHIRE" class="logo-pequeno">
+            <h2 class="marca-pequena">PROHIRE</h2>
+        </div>
+        
+        <h3>Recuperar Acceso</h3>
+        <p style="font-size: 13px; color: #666; margin-bottom: 20px; text-align: center;">
+            Ingresa tu correo y tu <b>PIN de seguridad de 4 dígitos</b> para resetear tu clave.
+        </p>
+
+        <form class="formulario" id="form-recuperar">
+            <input type="email" id="correo-recuperar" placeholder="Tu correo electrónico" required>
+            
+            <!-- AQUÍ ESTÁ LA CAJITA DEL PIN QUE FALTABA -->
+            <input type="password" id="pin-recuperar" placeholder="PIN de seguridad (4 números)" maxlength="4" required>
+            
+            <button type="submit" class="btn-morado-link">GENERAR CLAVE</button>
+            
+            <div id="mensaje-recuperacion" style="display: none; width: 100%;"></div>
+        </form>
+
+        <p style="margin-top: 20px; font-size: 13px;">
+            <a href="login.html" style="color: #002d55; font-weight: bold;">⬅ Volver a Iniciar Sesión</a>
+        </p>
+    </main>
+    
+    <script src="global.js?v=10"></script>
+    <script src="auth.js?v=10"></script>
+</body>
+</html>

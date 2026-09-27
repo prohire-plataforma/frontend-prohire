@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>PROHIRE - Login</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="modo-tarjeta">
+    <main class="pantalla">
+        <div class="header-interno">
+            <img src="img/logo.jpg" alt="Logo" class="logo-pequeno">
+            <h2 class="marca-pequena">PROHIRE</h2>
+        </div>
+        
+        <h3>Iniciar Sesión</h3>
+
+        <form class="formulario" id="form-login">
+            <input type="email" id="correo-login" placeholder="Correo electrónico" required>
+            <input type="password" id="pass-login" placeholder="Contraseña" required>
+            
+            <button type="submit" class="btn-morado-link">INGRESAR</button>
+            
+            <div style="margin-top: 15px;">
+                <a href="olvido-pass.html" style="font-size: 13px; color: #8A2BE2; text-decoration: none;">¿Olvidó su contraseña?</a>
+            </div>
+        </form>
+
+        <p style="margin-top: 20px; font-size: 13px;">
+            ¿No tienes cuenta? <a href="seleccion.html" style="color: #002d55; font-weight: bold;">Regístrate</a>
+        </p>
+    </main>
+   <script src="global.js"></script>
+<script src="auth.js"></script>
+</body>
+</html>

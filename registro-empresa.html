@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PROHIRE - Registro Empresa</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="modo-tarjeta">
+    <main class="pantalla">
+        <div class="header-interno">
+            <img src="img/logo.jpg" alt="Logo" class="logo-pequeno">
+            <h2 class="marca-pequena">PROHIRE</h2>
+        </div>
+        
+        <h3 class="titulo-seccion">Registro Empresa</h3>
+        
+        <form class="formulario" id="form-registro-empresa">
+            <input type="text" id="nombre-empresa" placeholder="Nombre de la Empresa o NIT" required>
+            <input type="email" id="correo-empresa" placeholder="Correo corporativo" required>
+            
+  <!-- SELECTOR MASIVO DE INDUSTRIA / SECTOR EMPRESARIAL -->
+            <select id="industria-empresa" required style="padding: 12px; border-radius: 8px; border: 1.5px solid #ddd; outline: none; margin-bottom: 12px; width: 100%;" onchange="verificarIndustria(this)">
+                <option value="" disabled selected>Selecciona la Industria / Sector...</option>
+                
+                <optgroup label="Tecnología, Software y Telecomunicaciones">
+                    <option value="Tecnología / Software">Tecnología y Desarrollo de Software</option>
+                    <option value="Telecomunicaciones">Telecomunicaciones y Conectividad</option>
+                    <option value="Ciberseguridad y Datos">Ciberseguridad y Analítica de Datos</option>
+                </optgroup>
+
+                <optgroup label="Industria, Manufactura y Producción">
+                    <option value="Manufactura / Producción">Manufactura y Producción Industrial</option>
+                    <option value="Automotriz y Autopartes">Automotriz y Ensamblaje</option>
+                    <option value="Textil y Confecciones">Textil, Moda y Confecciones</option>
+                    <option value="Alimentos y Bebidas">Alimentos y Bebidas (Procesamiento)</option>
+                    <option value="Química y Farmacéutica">Química, Plásticos y Farmacéutica</option>
+                </optgroup>
+
+                <optgroup label="Agro, Minería y Energía">
+                    <option value="Agroindustria / Ganadería">Agroindustria, Agricultura y Ganadería</option>
+                    <option value="Minería y Petróleos">Minería, Petróleo y Gas</option>
+                    <option value="Energía y Servicios Públicos">Energía Eléctrica y Energías Renovables</option>
+                </optgroup>
+
+                <optgroup label="Construcción, Logística y Transporte">
+                    <option value="Construcción e Ingeniería">Construcción, Obras Civiles e Ingeniería</option>
+                    <option value="Logística / Transporte">Logística, Transporte y Cadena de Suministro</option>
+                    <option value="Comercio Exterior y Aduanas">Comercio Exterior, Importación y Exportación</option>
+                </optgroup>
+
+                <optgroup label="Comercio, Retail y Servicios">
+                    <option value="Comercio y Retail">Comercio Mayorista, Minorista y Retail</option>
+                    <option value="Bancos y Finanzas">Banca, Seguros y Servicios Financieros</option>
+                    <option value="Salud y Hospitalaria">Salud, Clínicas y Servicios Hospitalarios</option>
+                    <option value="Educación y Universidades">Educación, Colegios y Universidades</option>
+                    <option value="Turismo, Hotelería y Gastronomía">Turismo, Hotelería y Restaurantes</option>
+                    <option value="Marketing, Publicidad y Medios">Marketing, Publicidad y Medios de Comunicación</option>
+                    <option value="Servicios Jurídicos y Legales">Servicios Jurídicos, Abogados y Notarías</option>
+                    <option value="Inmobiliaria y Construcción">Inmobiliaria, Avalúos y Administración de Propiedad</option>
+                    <option value="Seguridad y Vigilancia Privada">Seguridad y Vigilancia Privada</option>
+                    <option value="Servicios Generales y Aseo">Servicios Generales, Aseo y Mantenimiento</option>
+                </optgroup>
+
+                <option value="OTRO">Otro Sector (Especificar)</option>
+            </select>
+            <input type="text" id="industria-empresa-otro" placeholder="Especifica la industria..." style="display: none; padding: 12px; border-radius: 8px; border: 1.5px solid #ddd; margin-bottom: 12px; width: 100%;">
+            <input type="tel" id="telefono-empresa" placeholder="Teléfono de la empresa" required>
+            
+            <!-- CAJA DEL PIN -->
+            <input type="text" id="pin-empresa" placeholder="Crea un PIN de seguridad (4 números)" maxlength="4" pattern="\d{4}" title="Debe ser exactamente de 4 números" style="background-color: #fcf3ff; border-color: #8A2BE2;" required>
+            
+            <input type="password" id="pass-empresa" placeholder="Contraseña (mín. 8 carac., Mayús, Núm, Símbolo)" required>
+            <button type="submit" class="btn-morado-link">REGISTRAR EMPRESA</button>
+        </form>
+        
+        <a href="seleccion.html" class="btn-volver">← Volver</a>
+    </main>
+
+    <script>
+        function verificarIndustria(select) {
+            const inputOtro = document.getElementById('industria-empresa-otro');
+            if (select.value === 'OTRO') {
+                inputOtro.style.display = 'block';
+                inputOtro.required = true;
+            } else {
+                inputOtro.style.display = 'none';
+                inputOtro.required = false;
+                inputOtro.value = '';
+            }
+        }
+    </script>
+    <script src="global.js"></script>
+    <script src="auth.js"></script>
+</body>
+</html>

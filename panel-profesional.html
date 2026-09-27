@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PROHIRE - Panel Profesional</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header class="header-top">
+    <div style="display:flex;align-items:center;gap:20px;">
+        <h2 class="logo-limpio">PROHIRE <span class="tag-rol">Profesional</span></h2>
+        <div class="buscador-container">
+            <input type="text" placeholder="Buscar empleos por cargo o empresa..." id="input-busqueda">
+        </div>
+    </div>
+    
+    <div class="perfil-dropdown-contenedor">
+        <div class="avatar-trigger" style="position: relative; cursor: pointer;" title="Haz clic para cambiar tu foto">
+            <span id="nombre-mini">Cargando...</span>
+            
+            <!-- AVATAR CON INPUT INVISIBLE SUPERPUESTO (Soporte webp, png, jpg) -->
+            <div style="position: relative; display: inline-block;">
+                <img src="https://cdn-icons-png.flaticon.com/512/149/149071.png" alt="Perfil" class="avatar-redondo" id="foto-perfil-mini" style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover;">
+                <input type="file" id="input-foto-rapida" accept="image/png, image/jpeg, image/webp" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; opacity: 0; cursor: pointer;" title="Haz clic para cambiar tu foto">
+            </div>
+        </div>
+        
+        <div class="dropdown-menu">
+            <div class="dropdown-info">
+                <strong id="dropdown-nombre">Usuario</strong>
+                <span id="dropdown-email">correo@prohire.com</span>
+            </div>
+            <hr class="dropdown-divider">
+            <button onclick="mostrarSeccion('perfil')" class="dropdown-item">⚙️ Mi Perfil</button>
+            <button onclick="cerrarSesion()" class="dropdown-item salir">🚪 Cerrar Sesión</button>
+        </div>
+    </div>
+</header>
+
+<div class="layout-principal">
+    <aside class="menu-social">
+        <nav>
+            <a href="#" class="link-menu activo" id="btn-inicio" onclick="mostrarSeccion('inicio')">🏠 Inicio</a>
+            <a href="#" class="link-menu" id="btn-perfil" onclick="mostrarSeccion('perfil')">⚙️ Mi Perfil</a>
+            <a href="#" class="link-menu" id="btn-postulaciones" onclick="mostrarSeccion('postulaciones')">📄 Mis Postulaciones</a>
+            <hr style="margin:10px 0;border:0;border-top:1px solid #ddd;">
+            <a href="index.html" class="link-menu">🚪 Cerrar Sesión</a>
+        </nav>
+    </aside>
+
+    <main class="muro-ofertas">
+        <section id="sec-inicio">
+            <h3 style="margin-bottom:15px;">Ofertas para ti</h3>
+            <div id="feed-empleos"></div>
+        </section>
+
+        <section id="sec-perfil" style="display:none;">
+            <h3 style="margin-bottom:15px; color: #2c3e50;">Mi Perfil Profesional</h3>
+            <form id="form-perfil-profesional" class="post-empleo formulario" style="background: #fff; padding: 25px; border-radius: 8px; border: 1px solid #e1e8ed;">
+                <p style="font-size: 13px; color: #666; margin-bottom: 15px;">Mantén tu información, foto y documentos actualizados.</p>
+
+                <label style="font-weight: bold; display: block; margin-top: 10px;">Correo Electrónico:</label>
+                <input type="email" id="perfil-email" placeholder="Tu correo actual" required style="width: 100%; padding: 8px; margin-top: 5px; margin-bottom: 10px;">
+                
+                <label style="font-weight: bold; display: block;">Cambiar Contraseña (Opcional):</label>
+                <input type="text" id="perfil-password" placeholder="Escribe aquí tu nueva clave (mín. 8 carac., Mayús, Núm, Símbolo)" style="width: 100%; padding: 8px; margin-top: 5px; margin-bottom: 10px;">
+
+                <label style="font-weight: bold; display: block;">Profesión / Cargo principal:</label>
+                <!-- SELECTOR MASIVO DE PROFESIÓN / CARGO / OFICIO -->
+                <select id="perfil-profesion" required style="width: 100%; padding: 8px; margin-top: 5px; margin-bottom: 10px; border-radius: 5px; border: 1px solid #ccc; outline: none;" onchange="verificarPerfilEdit(this)">
+                    <option value="" disabled selected>Selecciona tu Profesión u Oficio principal...</option>
+                    
+                    <optgroup label="Tecnología y Sistemas">
+                        <option value="Desarrollador Full-Stack">Desarrollador Full-Stack</option>
+                        <option value="Desarrollador Frontend">Desarrollador Frontend</option>
+                        <option value="Desarrollador Backend">Desarrollador Backend</option>
+                        <option value="Ingeniero de Sistemas">Ingeniero de Sistemas / Software</option>
+                        <option value="Analista de Datos / Data Science">Analista de Datos / Data Science</option>
+                        <option value="Soporte IT / Helpdesk">Soporte Técnico IT / Mesa de Ayuda</option>
+                        <option value="Diseñador UI/UX">Diseñador UI/UX / Multimedia</option>
+                        <option value="Administrador de Bases de Datos">Administrador de Bases de Datos (DBA)</option>
+                    </optgroup>
+
+                    <optgroup label="Operaciones, Logística y Trabajo Manual">
+                        <option value="Operario de Producción / Logística">Operario de Producción y Carga (Armado de Bultos)</option>
+                        <option value="Bodeguero / Almacenista">Bodeguero, Almacenista e Inventarios</option>
+                        <option value="Conductor / Repartidor">Conductor (Licencias C1/C2/C3) y Repartidor</option>
+                        <option value="Mecánico Industrial / Automotriz">Mecánico Industrial y Automotriz</option>
+                        <option value="Electricista / Técnicos de Mantenimiento">Electricista y Técnico de Mantenimiento</option>
+                        <option value="Soldador / Metalmecánica">Soldador y Operario Metalmecánico</option>
+                    </optgroup>
+
+                    <optgroup label="Administración, Finanzas y Legal">
+                        <option value="Administrador de Empresas">Administrador de Empresas / Negocios</option>
+                        <option value="Contador / Auxiliar Contable">Contador Público y Auxiliar Contable</option>
+                        <option value="Analista de Recursos Humanos / Talento Humano">Analista de Talento Humano y Selección</option>
+                        <option value="Asistente Administrativo / Secretariado">Asistente Administrativo y Secretariado</option>
+                        <option value="Abogado / Asesor Jurídico">Abogado y Asesor Jurídico</option>
+                    </optgroup>
+
+                    <optgroup label="Comercial, Ventas y Atención al Cliente">
+                        <option value="Asesor Comercial / Ventas">Asesor Comercial y Ejecutivo de Ventas</option>
+                        <option value="Atención al Cliente / Call Center">Atención al Cliente y Call Center</option>
+                        <option value="Gerente de Ventas / Account Manager">Gerente de Cuentas y Comercial</option>
+                        <option value="Mercad Tenedor / Impulsador">Mercadista e Impulsador de Ventas</option>
+                    </optgroup>
+
+                    <optgroup label="Salud, Educación y Servicios">
+                        <option value="Enfermero / Auxiliar de Enfermería">Enfermero y Auxiliar en Salud</option>
+                        <option value="Médico / Especialista">Médico General o Especialista</option>
+                        <option value="Docente / Profesor">Docente, Tutor y Profesor</option>
+                        <option value="Chef / Cocinero / Ayudante de Cocina">Chef, Cocinero y Personal de Gastronomía</option>
+                        <option value="Operario de Aseo y Servicios Generales">Operario de Aseo, Limpieza y Servicios Generales</option>
+                        <option value="Vigilante / Guardas de Seguridad">Guarda de Seguridad y Vigía</option>
+                    </optgroup>
+
+                    <option value="OTRO">Otro Cargo u Oficio (Especificar)</option>
+                </select>
+                <input type="text" id="perfil-profesion-otro" placeholder="Escribe tu profesión u oficio..." style="display: none; width: 100%; padding: 8px; margin-bottom: 10px; border-radius: 5px; border: 1px solid #ccc;">
+                
+                <label style="font-weight: bold; display: block;">Teléfono de contacto:</label>
+                <input type="tel" id="perfil-telefono" placeholder="Tu número de celular" required style="width: 100%; padding: 8px; margin-top: 5px; margin-bottom: 10px;">
+                
+                <div style="margin-top: 10px; margin-bottom: 15px; background: #f0f7ff; padding: 12px; border-radius: 8px; border: 1px dashed #3498db;">
+                    <label style="display: block; font-weight: bold; color: #2980b9; margin-bottom: 5px;">📄 Hoja de Vida (PDF opcional):</label>
+                    <input type="file" id="perfil-cv" accept=".pdf" style="width: 100%;">
+                    <a id="link-ver-cv" href="#" target="_blank" style="display: none; color: #27ae60; font-weight: bold; text-decoration: none; margin-top: 8px; font-size: 13px;">✅ Ver CV actual guardado</a>
+                </div>
+
+                <button type="submit" class="btn-morado-link" style="width: 100%; padding: 12px; background: #6f42c1; color: white; border: none; border-radius: 5px; font-weight: bold; cursor: pointer; margin-top: 10px;">GUARDAR CAMBIOS</button>
+            </form>
+        </section>
+
+        <section id="sec-postulaciones" style="display:none;">
+            <h3 style="margin-bottom:15px;">Historial de Postulaciones</h3>
+            <div class="post-empleo" style="padding:0;overflow-x:auto;border:1px solid #eee;">
+                <table style="width:100%;border-collapse:collapse;min-width:500px;">
+                    <thead style="background:#f8f9fa;">
+                        <tr>
+                            <th style="padding:12px;text-align:left;border-bottom:2px solid #ddd;">Cargo</th>
+                            <th style="padding:12px;text-align:left;border-bottom:2px solid #ddd;">Empresa</th>
+                            <th style="padding:12px;text-align:left;border-bottom:2px solid #ddd;">Fecha</th>
+                            <th style="padding:12px;text-align:left;border-bottom:2px solid #ddd;">Estado</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tabla-postulaciones-body"></tbody>
+                </table>
+            </div>
+        </section>
+    </main>
+</div>
+
+<script>
+    function verificarPerfilEdit(select) {
+        const inputOtro = document.getElementById('perfil-profesion-otro');
+        if (select.value === 'OTRO') {
+            inputOtro.style.display = 'block';
+            inputOtro.required = true;
+        } else {
+            inputOtro.style.display = 'none';
+            inputOtro.required = false;
+            inputOtro.value = '';
+        }
+    }
+</script>
+<script src="global.js?v=13"></script>
+<script src="profesional.js?v=13"></script>
+</body>
+</html>

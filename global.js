@@ -1,18 +1,17 @@
 // ==============================================================
-// global.js - Lógica general de mi plataforma (PROHIRE)
+// global.js - Lógica general de la plataforma PROHIRE
 // ==============================================================
 
 document.addEventListener('DOMContentLoaded', () => {
     const user = JSON.parse(localStorage.getItem('usuarioActivo'));
 
-    // Actualizo los nombres en la barra superior si hay un usuario logueado
     const nameTags = document.querySelectorAll('#nombre-mini, #nombre-mini-empresa');
     if (user && nameTags.length > 0) {
         nameTags.forEach(tag => tag.innerText = user.nombre);
     }
 });
 
-// Función para navegar entre las secciones de los paneles sin recargar la página
+// Navegación unificada entre secciones para ambos paneles
 window.mostrarSeccion = function(seccion) {
     const secciones = ['sec-inicio', 'sec-perfil', 'sec-postulaciones', 'sec-vacantes', 'sec-postulantes', 'sec-publicar'];
     
@@ -28,11 +27,16 @@ window.mostrarSeccion = function(seccion) {
         document.getElementById(`btn-${seccion}`)?.classList.add('activo');
     }
 
-    // Recargas automáticas al navegar por las vistas
-    if (seccion === 'postulaciones' && typeof cargarHistorialPostulaciones === 'function') cargarHistorialPostulaciones();
-    if (seccion === 'postulantes' && typeof cargarPostulantesParaEmpresa === 'function') cargarPostulantesParaEmpresa();
-    if (seccion === 'vacantes' && typeof actualizarMisVacantes === 'function') actualizarMisVacantes();
-    if (seccion === 'perfil' && typeof actualizarPerfil === 'function') actualizarPerfil();
+    // Sincronización exacta con las funciones de carga
+    if (seccion === 'postulaciones' && typeof cargarMisPostulacionesYVacantes === 'function') {
+        cargarMisPostulacionesYVacantes();
+    }
+    if (seccion === 'postulantes' && typeof cargarPostulantesParaEmpresa === 'function') {
+        cargarPostulantesParaEmpresa();
+    }
+    if (seccion === 'vacantes' && typeof actualizarMisVacantes === 'function') {
+        actualizarMisVacantes();
+    }
 };
 
 window.mostrarSeccionEmpresa = window.mostrarSeccion;

@@ -41,8 +41,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
             const datosActualizados = {
                 id_usuario: Number(idProfesional),
-                email: usuarioActivo.email || usuarioActivo.correo,
-                password: usuarioActivo.password,
+                nombre: usuarioActivo.nombre || "",
+                email: usuarioActivo.email || usuarioActivo.correo || "",
+                password: usuarioActivo.password || "",
+                rol: "profesional",
                 profesion: usuarioActivo.profesion || "",
                 telefono: usuarioActivo.telefono || "",
                 cv_documento: usuarioActivo.cv_documento || "",

@@ -2,7 +2,7 @@
 // auth.js - Autenticación, Registro (Seguro) y Recuperación
 // ==============================================================
 
-const API_URL = 'https://prohireplataform.up.railway.app/api';
+const API_URL = 'https://prohireplataform.up.railway.app/Prohire/api';
 
 document.addEventListener('submit', (e) => {
     const form = e.target;

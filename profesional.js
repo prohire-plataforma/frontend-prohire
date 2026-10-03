@@ -2,7 +2,7 @@
 // profesional.js - Panel Profesional COMPLETO (Con Seguridad y Notificación de Aceptación)
 // ==============================================================
 
-const API_URL = 'https://prohireplataform.up.railway.app/api';
+const API_URL = 'https://prohireplataform.up.railway.app/Prohire/api';
 
 const usuarioActivo = JSON.parse(localStorage.getItem('usuarioActivo'));
 if (!usuarioActivo || usuarioActivo.rol !== 'profesional') {

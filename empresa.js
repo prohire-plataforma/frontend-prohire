@@ -1,8 +1,7 @@
 // ==============================================================
 // empresa.js - Panel de Empresa COMPLETO (Con Seguridad y Logotipo)
 // ==============================================================
-
-const API_URL = 'https://prohireplataform.up.railway.app/api';
+ const API_URL = 'https://prohireplataform.up.railway.app/Prohire/api';
 
 const empresaActual = JSON.parse(localStorage.getItem('usuarioActivo'));
 if (!empresaActual || empresaActual.rol !== 'empresa') {

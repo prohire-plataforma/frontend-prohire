@@ -40,8 +40,8 @@ document.addEventListener('submit', (e) => {
     }
 
    // ==========================================
-    // 2. REGISTRO (CON VALIDACIÓN DE CONTRASEÑA Y CAPTURA DE "OTRO")
-    // ==========================================
+   // 2. REGISTRO (CON VALIDACIÓN DE CONTRASEÑA Y CAPTURA DE "OTRO")
+   // ==========================================
     if (form.id === 'form-registro-profesional' || form.id === 'form-registro-empresa') {
         e.preventDefault();
         
@@ -62,7 +62,7 @@ document.addEventListener('submit', (e) => {
 
             const telefono = esEmpresa ? document.getElementById('telefono-empresa').value : document.getElementById('telefono-prof').value;
             
-            // CAPTURA CORRECTA DE PROFESIÓN / INDUSTRIA (EVALUANDO SI SE ELIGIó "OTRO")
+            // CAPTURA CORRECTA DE PROFESIÓN / INDUSTRIA (EVALUANDO SI SE ELIGIÓ "OTRO")
             let profesion = "";
             if (esEmpresa) {
                 const selectInd = document.getElementById('industria-empresa');
@@ -87,6 +87,7 @@ document.addEventListener('submit', (e) => {
 
             const pin = cajaPin.value;
 
+            // Objeto completo sincronizado con el DAO de Java y la BD en Railway
             const nuevoUsuario = {
                 nombre: nombre,
                 email: email,
@@ -94,7 +95,10 @@ document.addEventListener('submit', (e) => {
                 rol: rol,
                 profesion: profesion, 
                 telefono: telefono,
-                pin_seguridad: pin
+                ruta_cv: "",          // Sincronizado con la BD
+                cv_documento: "",     // Sincronizado con la BD
+                pin_seguridad: pin,
+                foto_perfil: ""       // Sincronizado con la BD
             };
 
             fetch(`${API_URL}/auth/registro`, {
@@ -102,14 +106,19 @@ document.addEventListener('submit', (e) => {
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(nuevoUsuario)
             })
-            .then(respuesta => {
-                if (!respuesta.ok) throw new Error('Error al registrar usuario');
+            .then(async respuesta => {
+                if (!respuesta.ok) {
+                    // Capturamos el JSON de error que mande Java o texto plano si falla
+                    const errorData = await respuesta.json().catch(() => ({ error: 'Error desconocido en el servidor' }));
+                    throw new Error(errorData.error || 'Error al registrar usuario');
+                }
                 alert("✅ Registro exitoso. Ya puedes iniciar sesión.");
                 window.location.href = "login.html";
             })
             .catch(error => {
                 console.error("Error en registro:", error);
-                alert("⚠️ Hubo un error al registrarte. Es posible que el correo ya exista en la base de datos.");
+                // ESTA ALERTA TE MOSTRARÁ EL ERROR REAL Y EXACTO EN PANTALLA
+                alert("⚠️ Detalle del error: " + error.message);
             });
 
         } catch (err) {

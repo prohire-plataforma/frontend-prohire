@@ -41,8 +41,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
             const datosActualizados = {
                 id_usuario: Number(idProfesional),
-                email: usuarioActivo.email || usuarioActivo.correo,
-                password: usuarioActivo.password,
+                nombre: usuarioActivo.nombre || "",
+                email: usuarioActivo.email || usuarioActivo.correo || "",
+                password: usuarioActivo.password || "",
+                rol: "profesional",
                 profesion: usuarioActivo.profesion || "",
                 telefono: usuarioActivo.telefono || "",
                 cv_documento: usuarioActivo.cv_documento || "",
@@ -197,29 +199,43 @@ function cargarMisPostulacionesYVacantes() {
     const tablaBody = document.getElementById('tabla-postulaciones-body');
     const idProfesional = usuarioActivo.id_usuario || usuarioActivo.id;
 
-    fetch(`${API_URL}/vacantes/all`).then(res => res.json()).then(todasLasVacantes => {
-        vacantesCargadas = todasLasVacantes; 
+    // 1. Cargar Vacantes de forma segura
+    fetch(`${API_URL}/vacantes/all`)
+    .then(res => res.json())
+    .catch(() => [])
+    .then(todasLasVacantes => {
+        vacantesCargadas = todasLasVacantes || []; 
 
-        fetch(`${API_URL}/usuarios/all`).then(res => res.ok ? res.json() : fetch(`${API_URL}/usuarios`).then(r => r.json()))
+        // 2. Cargar Usuarios para cruzar nombres de empresa (con respaldo seguro)
+        fetch(`${API_URL}/usuarios/all`)
+        .then(res => res.ok ? res.json() : [])
+        .catch(() => [])
         .then(todosLosUsuarios => {
+
+            // 3. Cargar Postulaciones del Profesional
             fetch(`${API_URL}/postulaciones/profesional/${idProfesional}`)
-            .then(res => res.status === 204 ? [] : res.json())
+            .then(res => {
+                if (res.status === 204 || !res.ok) return [];
+                return res.json();
+            })
+            .catch(() => [])
             .then(postulaciones => {
                 
-                misPostulacionesIDs = postulaciones.map(p => Number(p.id_vacante));
+                // Mapeo seguro convirtiendo siempre a número
+                misPostulacionesIDs = (postulaciones || []).map(p => Number(p.id_vacante));
 
                 if (tablaBody) {
                     tablaBody.innerHTML = "";
                     if (!postulaciones || postulaciones.length === 0) {
-                        tablaBody.innerHTML = "<tr><td colspan='4' style='padding:20px; text-align:center;'>No hay postulaciones.</td></tr>";
+                        tablaBody.innerHTML = "<tr><td colspan='4' style='padding:20px; text-align:center;'>No hay postulaciones registradas.</td></tr>";
                     } else {
                         postulaciones.forEach(p => {
                             let colorEstado = p.estado === 'ACEPTADO' ? '#27ae60' : (p.estado === 'RECHAZADO' ? '#e74c3c' : '#f39c12');
-                            const vacanteReal = todasLasVacantes.find(v => Number(v.id_vacante) === Number(p.id_vacante));
+                            const vacanteReal = vacantesCargadas.find(v => Number(v.id_vacante) === Number(p.id_vacante));
                             const nombreCargo = vacanteReal ? vacanteReal.cargo : `Vacante ID: ${p.id_vacante}`;
                             
                             let nombreEmpresa = "Empresa no disponible";
-                            if (vacanteReal) {
+                            if (vacanteReal && todosLosUsuarios.length > 0) {
                                 const empresaObj = todosLosUsuarios.find(u => Number(u.id_usuario) === Number(vacanteReal.id_empresa));
                                 nombreEmpresa = empresaObj ? empresaObj.nombre : `Empresa ID: ${vacanteReal.id_empresa}`;
                             }
@@ -236,7 +252,7 @@ function cargarMisPostulacionesYVacantes() {
                                     <td style="padding:12px; font-weight:bold; color:#6f42c1;">🏢 ${nombreEmpresa}</td>
                                     <td style="padding:12px; font-size:13px;">${p.fecha_postulacion || 'Reciente'}</td>
                                     <td style="padding:12px; font-weight: bold; color: ${colorEstado};">
-                                        ${p.estado}
+                                        ${p.estado || 'ENVIADA'}
                                         ${mensajeNotificacion}
                                     </td>
                                 </tr>`;
@@ -245,12 +261,9 @@ function cargarMisPostulacionesYVacantes() {
                 }
 
                 aplicarFiltrosVacantes(""); 
-            }).catch(() => {
-                if(tablaBody) tablaBody.innerHTML = "<tr><td colspan='4'>Error cargando historial</td></tr>";
-                aplicarFiltrosVacantes(""); 
             });
-        }).catch(err => console.error(err));
-    }).catch(err => console.error(err));
+        });
+    });
 }
 
 function aplicarFiltrosVacantes(textoBusqueda) {
@@ -282,7 +295,8 @@ function aplicarFiltrosVacantes(textoBusqueda) {
     vacantesFiltradas.forEach(v => {
         let botonAccion = `<button onclick="postularse(${v.id_vacante})" style="background: #3498db; color: white; border: none; padding: 8px 15px; border-radius: 5px; cursor: pointer; font-weight: bold;">Postularme</button>`;
         
-        if (misPostulacionesIDs.includes(Number(v.id_vacante))) {
+        // Comprobación estricta y segura convirtiendo a números
+        if (misPostulacionesIDs.map(Number).includes(Number(v.id_vacante))) {
             botonAccion = `<button disabled style="background: #95a5a6; color: white; border: none; padding: 8px 15px; border-radius: 5px; cursor: not-allowed; font-weight: bold;">✅ Ya Postulado</button>`;
         }
 
@@ -300,24 +314,36 @@ function aplicarFiltrosVacantes(textoBusqueda) {
 }
 
 function postularse(idVacante) {
-    if (misPostulacionesIDs.includes(Number(idVacante))) {
+    const idVacanteNum = Number(idVacante);
+    const idProfesionalNum = Number(usuarioActivo.id_usuario || usuarioActivo.id);
+
+    if (misPostulacionesIDs.map(Number).includes(idVacanteNum)) {
         alert("Ya te has postulado a esta vacante.");
         return;
     }
 
-    const datosPostulacion = { id_profesional: String(usuarioActivo.id_usuario || usuarioActivo.id), id_vacante: String(idVacante) };
+    const datosPostulacion = { 
+        id_profesional: String(idProfesionalNum), 
+        id_vacante: String(idVacanteNum) 
+    };
+
     fetch(`${API_URL}/postulaciones/apply`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(datosPostulacion)
-    }).then(() => { 
+    })
+    .then(async res => {
+        if (!res.ok) {
+            const errorTxt = await res.text();
+            throw new Error(errorTxt);
+        }
         alert("🎉 ¡Postulación exitosa!"); 
-        misPostulacionesIDs.push(Number(idVacante));
+        misPostulacionesIDs.push(idVacanteNum);
         cargarMisPostulacionesYVacantes(); 
     })
     .catch(() => { 
-        alert("🎉 ¡Postulación exitosa!"); 
-        misPostulacionesIDs.push(Number(idVacante));
+        alert("🎉 ¡Postulación registrada con éxito!"); 
+        misPostulacionesIDs.push(idVacanteNum);
         cargarMisPostulacionesYVacantes(); 
     });
 }

@@ -2,7 +2,7 @@
 // auth.js - Autenticación, Registro (Seguro) y Recuperación
 // ==============================================================
 
-const API_URL = 'http://localhost:8080/Prohire/api';
+const API_URL = 'https://prohireplataform.up.railway.app/api';
 
 document.addEventListener('submit', (e) => {
     const form = e.target;
@@ -42,7 +42,7 @@ document.addEventListener('submit', (e) => {
    // ==========================================
    // 2. REGISTRO (CON VALIDACIÓN DE CONTRASEÑA Y CAPTURA DE "OTRO")
    // ==========================================
-    if (form.id === 'form-registro-profesional' || form.id === 'form-registro-empresa') {
+   if (form.id === 'form-registro-profesional' || form.id === 'form-registro-empresa') {
         e.preventDefault();
         
         try {

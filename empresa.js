@@ -2,7 +2,7 @@
 // empresa.js - Panel de Empresa COMPLETO (Con Seguridad y Logotipo)
 // ==============================================================
 
-const API_URL = 'http://localhost:8080/Prohire/api';
+const API_URL = 'https://prohireplataform.up.railway.app/api';
 
 const empresaActual = JSON.parse(localStorage.getItem('usuarioActivo'));
 if (!empresaActual || empresaActual.rol !== 'empresa') {
@@ -246,7 +246,7 @@ window.cargarPostulantesParaEmpresa = function() {
                         <strong style="font-size: 15px; color: #333;">${p.nombreProfesional || `ID: ${p.id_profesional}`}</strong><br>
                         <span style="color: #666; font-size: 13px;">💼 <b>Perfil:</b> ${p.profesionProfesional || 'N/A'}</span><br>
                         <span style="color: #666; font-size: 13px;">📞 <b>Tel:</b> ${p.telefonoProfesional || 'N/A'}</span><br>
-                        <span style="color: #666; font-size: 13px;">✉️ <b>Email:</b> ${p.emailProfesional || 'N/A'}</span>
+                        <span style="color: #666; font-size: 13px;">✉️️ <b>Email:</b> ${p.emailProfesional || 'N/A'}</span>
                     </div>`;
 
                 let botonCV = `<span style="color:#999; font-size: 12px; font-style: italic;">Sin CV</span>`;

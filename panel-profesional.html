@@ -9,7 +9,7 @@
 <body>
 
 <header class="header-top">
-    <div style="display:flex;align-items:center;gap:20px;">
+    <div style="display:flex;align-items:center;gap:20px; flex-grow: 1; flex-wrap: wrap;">
         <h2 class="logo-limpio">PROHIRE <span class="tag-rol">Profesional</span></h2>
         <div class="buscador-container">
             <input type="text" placeholder="Buscar empleos por cargo o empresa..." id="input-busqueda">
@@ -68,7 +68,6 @@
                 <input type="text" id="perfil-password" placeholder="Escribe aquí tu nueva clave (mín. 8 carac., Mayús, Núm, Símbolo)" style="width: 100%; padding: 8px; margin-top: 5px; margin-bottom: 10px;">
 
                 <label style="font-weight: bold; display: block;">Profesión / Cargo principal:</label>
-                <!-- SELECTOR MASIVO DE PROFESIÓN / CARGO / OFICIO -->
                 <select id="perfil-profesion" required style="width: 100%; padding: 8px; margin-top: 5px; margin-bottom: 10px; border-radius: 5px; border: 1px solid #ccc; outline: none;" onchange="verificarPerfilEdit(this)">
                     <option value="" disabled selected>Selecciona tu Profesión u Oficio principal...</option>
                     

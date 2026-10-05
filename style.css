@@ -1,9 +1,8 @@
 /* ==========================================
    ESTILOS GLOBALES PROHIRE
-   definí estos colores y configuración base para mi proyecto
    ========================================== */
 :root {
-    --primario: #6f42c1; /* Ajusté el color primario al morado de mi marca */
+    --primario: #6f42c1;
     --exito: #2ecc71;
     --error: #e74c3c;
     --gris-fondo: #f4f6f9;
@@ -23,11 +22,6 @@ body {
     color: var(--texto);
 }
 
-/* =======================================================
-   ESTILOS ESPECÍFICOS PARA LOGIN, REGISTRO E INICIO (MODO TARJETA)  
-   ======================================================= */
-
-/*  configuré el cuerpo de la página para forzar el centrado absoluto */
 body.modo-tarjeta {
     min-height: 100vh;
     display: flex;
@@ -37,7 +31,6 @@ body.modo-tarjeta {
     padding: 20px;
 }
 
-/*  transformé el contenedor principal en una tarjeta flotante */
 body.modo-tarjeta .pantalla {
     background-color: var(--blanco);
     width: 100%;
@@ -49,11 +42,10 @@ body.modo-tarjeta .pantalla {
     border: 1px solid rgba(0,0,0,0.05);
 }
 
-/*  ajusté las dimensiones y el recuadro para centrar mi logo */
 .logo-bienvenida, .logo-pequeno {
     width: 90px;
     height: auto;
-    margin: 0 auto 20px auto; /* Esto garantiza que la imagen quede en la mitad */
+    margin: 0 auto 20px auto;
     display: block;
     padding: 5px;
     background: white;
@@ -66,10 +58,6 @@ body.modo-tarjeta h2, body.modo-tarjeta h3 {
     margin-bottom: 20px;
 }
 
-/* ==========================================
-   FORMULARIOS Y BOTONES 
-   utilicé las entradas de texto para una mejor experiencia de usuario y que siempre pience que esta en la misma app
-   ========================================== */
 .formulario {
     width: 100%;
     display: flex;
@@ -95,7 +83,6 @@ body.modo-tarjeta h2, body.modo-tarjeta h3 {
     box-shadow: 0 0 0 3px rgba(111, 66, 193, 0.15);
 }
 
-/*  creé estos botones con un efecto de elevación (3D) */
 .btn-morado-link {
     background: var(--primario);
     color: white;
@@ -135,32 +122,25 @@ body.modo-tarjeta h2, body.modo-tarjeta h3 {
     color: var(--primario);
 }
 
-
-/* ==========================================
-   LAYOUT Y MENÚ LATERAL (DASHBOARDS)
-   diseñé este menú lateral para que la navegación sea muy intuitiva
-   ========================================== */
 .layout-principal {
     display: flex;
     max-width: 1200px;
     margin: 30px auto;
-    gap: 30px; /* Di un poco más de respiración entre el menú y el contenido */
+    gap: 30px;
     padding: 0 20px;
 }
 
-/*  estructuré el contenedor del menú como una tarjeta flotante y fija */
 .menu-social {
     width: 280px;
     background: var(--blanco);
     padding: 25px 20px;
     border-radius: 16px;
     height: max-content;
-    box-shadow: 0 8px 25px rgba(0,0,0,0.05); /* Sombra muy suave y elegante */
-    position: sticky; /* Hice que el menú te persiga si bajas bajando la página */
+    box-shadow: 0 8px 25px rgba(0,0,0,0.05);
+    position: sticky;
     top: 90px;
 }
 
-/*  estilicé los enlaces del menú para que parezcan botones interactivos */
 .link-menu {
     display: flex;
     align-items: center;
@@ -175,19 +155,17 @@ body.modo-tarjeta h2, body.modo-tarjeta h3 {
     font-size: 15px;
 }
 
-/*  agregué este efecto para que el botón se mueva un poquito al pasar el mouse */
 .link-menu:hover {
     background: #f4f6f9;
     color: var(--primario);
     transform: translateX(6px); 
 }
 
-/*  destaqué la sección en la que está el usuario con el color principal de la marca */
 .link-menu.activo {
     background: var(--primario);
     color: white;
     box-shadow: 0 4px 15px rgba(111, 66, 193, 0.3);
-    transform: translateX(0); /* Evita que se mueva si ya está activo */
+    transform: translateX(0);
 } 
 
 .muro-ofertas {
@@ -195,10 +173,6 @@ body.modo-tarjeta h2, body.modo-tarjeta h3 {
     width: 100%;
 }
 
-
-/* ==========================================
-   NUEVOS ESTILOS: HEADER ESTILO  Y BÚSQUEDA
-   ========================================== */
 .header-top {
     background: var(--blanco);
     padding: 12px 20px;
@@ -209,6 +183,7 @@ body.modo-tarjeta h2, body.modo-tarjeta h3 {
     position: sticky;
     top: 0;
     z-index: 1000;
+    flex-wrap: wrap;
 }
 
 .logo-limpio {
@@ -246,13 +221,11 @@ body.modo-tarjeta h2, body.modo-tarjeta h3 {
     box-shadow: 0 0 0 3px rgba(111, 66, 193, 0.1);
 }
 
-/* Contenedor del Avatar (El truco del hover) */
 .perfil-dropdown-contenedor { position: relative; display: inline-block; }
 .avatar-trigger { display: flex; align-items: center; gap: 10px; cursor: pointer; padding: 5px; }
 .avatar-redondo { width: 40px; height: 40px; border-radius: 50%; object-fit: cover; border: 2px solid var(--primario); transition: transform 0.2s; background: #f1f2f6; }
 .avatar-trigger:hover .avatar-redondo { transform: scale(1.05); }
 
-/* El Menú oculto */
 .dropdown-menu { display: none; position: absolute; right: 0; top: 100%; background: white; min-width: 220px; box-shadow: 0 8px 16px rgba(0,0,0,0.15); border-radius: 8px; border: 1px solid #eee; z-index: 1000; overflow: hidden; }
 .perfil-dropdown-contenedor:hover .dropdown-menu { display: block; } 
 .dropdown-info { padding: 15px; background: #f8f9fa; }
@@ -266,20 +239,26 @@ body.modo-tarjeta h2, body.modo-tarjeta h3 {
 
 #nombre-mini, #nombre-mini-empresa { font-weight: 600; color: #333; font-size: 14px; }
 
-
 /* ==========================================
-   DISEÑO RESPONSIVO (CELULARES) - Reemplaza APK
+   DISEÑO RESPONSIVO (CELULARES) - Ajustado y visible
    ========================================== */
 @media screen and (max-width: 768px) {
-    /* Ajustes generales */
     .layout-principal { flex-direction: column; margin: 15px auto; padding: 0 10px; }
     
-    /* El buscador se esconde o se hace pequeño */
-    .buscador-container { display: none; }
-    .header-top { padding: 10px; }
-    #nombre-mini, #nombre-mini-empresa { display: none; } /* Oculta el nombre en celular para ahorrar espacio */
+    /* 📱 CORRECCIÓN: El buscador ya no se esconde, ahora se adapta al 100% de la pantalla en móvil */
+    .buscador-container { 
+        display: block !important; 
+        width: 100%; 
+        margin-top: 10px; 
+    }
+    
+    .buscador-container input {
+        width: 100% !important;
+    }
 
-    /* Menú Lateral se vuelve menú inferior estilo App */
+    .header-top { padding: 10px; flex-direction: column; align-items: stretch; }
+    #nombre-mini, #nombre-mini-empresa { display: none; }
+
     .menu-social {
         width: 100%;
         position: fixed;
@@ -292,6 +271,7 @@ body.modo-tarjeta h2, body.modo-tarjeta h3 {
         box-shadow: 0 -5px 20px rgba(0,0,0,0.1);
         display: flex;
         justify-content: center;
+        background: var(--blanco);
     }
     
     .menu-social nav {
@@ -312,13 +292,9 @@ body.modo-tarjeta h2, body.modo-tarjeta h3 {
     
     .link-menu:hover { transform: none; }
     
-    /* Ajuste para que el contenido no quede debajo del menú inferior */
     .muro-ofertas { margin-bottom: 80px; }
     
-    /* Tablas en móvil */
     .post-empleo table { display: block; overflow-x: auto; white-space: nowrap; }
     
-    /* Inputs en móvil */
     .formulario select { width: 100% !important; margin-bottom: 10px; }
-    .formulario > div { flex-direction: column; gap: 0; }
 }

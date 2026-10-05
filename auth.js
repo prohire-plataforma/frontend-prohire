@@ -108,7 +108,6 @@ document.addEventListener('submit', (e) => {
             })
             .then(async respuesta => {
                 if (!respuesta.ok) {
-                    // Capturamos el JSON de error que mande Java o texto plano si falla
                     const errorData = await respuesta.json().catch(() => ({ error: 'Error desconocido en el servidor' }));
                     throw new Error(errorData.error || 'Error al registrar usuario');
                 }
@@ -117,7 +116,6 @@ document.addEventListener('submit', (e) => {
             })
             .catch(error => {
                 console.error("Error en registro:", error);
-                // ESTA ALERTA TE MOSTRARÁ EL ERROR REAL Y EXACTO EN PANTALLA
                 alert("⚠️ Detalle del error: " + error.message);
             });
 
@@ -146,8 +144,10 @@ document.addEventListener('submit', (e) => {
 
                 const datosActualizados = {
                     id_usuario: usuarioValido.id_usuario,
+                    nombre: usuarioValido.nombre || "",         // <--- Añadido para evitar error 400
                     email: usuarioValido.email,
                     password: passTemporal,
+                    rol: usuarioValido.rol || "profesional",    // <--- Añadido para evitar error 400
                     profesion: usuarioValido.profesion || "",
                     telefono: usuarioValido.telefono || "",
                     cv_documento: usuarioValido.cv_documento || "",

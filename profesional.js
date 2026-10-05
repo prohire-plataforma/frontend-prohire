@@ -1,5 +1,5 @@
 // ==============================================================
-// profesional.js - Panel Profesional COMPLETO (Con Seguridad y Notificación de Aceptación)
+// profesional.js - Panel Profesional COMPLETO (Con Búsqueda y Filtro Masivo)
 // ==============================================================
 
 const API_URL = 'https://prohireplataform.up.railway.app/Prohire/api';
@@ -73,10 +73,11 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-    // --- Buscador ---
+    // --- Buscador en tiempo real (Funciona en PC y Celular) ---
     const inputBusqueda = document.getElementById('input-busqueda');
     if (inputBusqueda) {
-        inputBusqueda.addEventListener('keyup', (e) => aplicarFiltrosVacantes(e.target.value.toLowerCase()));
+        inputBusqueda.addEventListener('input', (e) => aplicarFiltrosVacantes(e.target.value));
+        inputBusqueda.addEventListener('keyup', (e) => aplicarFiltrosVacantes(e.target.value));
     }
 
     // --- Llenar Perfil (Correo, Teléfono, Profesión) ---
@@ -89,7 +90,6 @@ document.addEventListener("DOMContentLoaded", () => {
     if (inputEmail) inputEmail.value = usuarioActivo.email || usuarioActivo.correo || "";
     if (inputTelefono) inputTelefono.value = usuarioActivo.telefono || "";
     
-    // Asignar profesión al select o manejar si fue personalizada (OTRO)
     if (selectProfesion && usuarioActivo.profesion) {
         let encontrada = false;
         for (let option of selectProfesion.options) {
@@ -138,7 +138,6 @@ async function guardarPerfilEnBD(e, usuarioActual, idProfesional) {
     
     let nuevaPassword = usuarioActual.password;
     if (inputPassword !== "") {
-        // VALIDACIÓN ESTRICTA DE CONTRASEÑA SEGURA
         const regexPassword = /^(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/;
         if (!regexPassword.test(inputPassword)) {
             alert("⚠️ La contraseña debe tener al menos 8 caracteres, una mayúscula, un número y un símbolo especial.");
@@ -147,7 +146,6 @@ async function guardarPerfilEnBD(e, usuarioActual, idProfesional) {
         nuevaPassword = inputPassword;
     }
 
-    // CAPTURA CORRECTA DE LA PROFESIÓN (EVALUANDO SI ELIGIÓ "OTRO")
     const selectProfEdit = document.getElementById('perfil-profesion');
     const nuevaProfesion = (selectProfEdit.value === 'OTRO') ? document.getElementById('perfil-profesion-otro').value : selectProfEdit.value;
 
@@ -161,10 +159,10 @@ async function guardarPerfilEnBD(e, usuarioActual, idProfesional) {
 
     const datosActualizados = {
         id_usuario: Number(idProfesional),
-        nombre: usuarioActual.nombre || "",          // <-- Campo obligatorio añadido
+        nombre: usuarioActual.nombre || "",          
         email: nuevoEmail,
         password: nuevaPassword,
-        rol: usuarioActual.rol || "profesional",     // <-- Campo obligatorio añadido
+        rol: usuarioActual.rol || "profesional",     
         profesion: nuevaProfesion,
         telefono: nuevoTelefono,
         cv_documento: cvFinal,
@@ -205,14 +203,14 @@ function cargarMisPostulacionesYVacantes() {
     const tablaBody = document.getElementById('tabla-postulaciones-body');
     const idProfesional = usuarioActivo.id_usuario || usuarioActivo.id;
 
-    // 1. Cargar Vacantes de forma segura
+    // 1. Cargar Vacantes
     fetch(`${API_URL}/vacantes/all`)
     .then(res => res.json())
     .catch(() => [])
     .then(todasLasVacantes => {
         vacantesCargadas = todasLasVacantes || []; 
 
-        // 2. Cargar Usuarios para cruzar nombres de empresa (con respaldo seguro)
+        // 2. Cargar Usuarios
         fetch(`${API_URL}/usuarios/all`)
         .then(res => res.ok ? res.json() : [])
         .catch(() => [])
@@ -227,7 +225,6 @@ function cargarMisPostulacionesYVacantes() {
             .catch(() => [])
             .then(postulaciones => {
                 
-                // Mapeo seguro convirtiendo siempre a número
                 misPostulacionesIDs = (postulaciones || []).map(p => Number(p.id_vacante));
 
                 if (tablaBody) {
@@ -246,7 +243,6 @@ function cargarMisPostulacionesYVacantes() {
                                 nombreEmpresa = empresaObj ? empresaObj.nombre : `Empresa ID: ${vacanteReal.id_empresa}`;
                             }
 
-                            // MENSAJE DE NOTIFICACIÓN SI LA EMPRESA LO HA ACEPTADO
                             let mensajeNotificacion = "";
                             if (p.estado === 'ACEPTADO') {
                                 mensajeNotificacion = `<br><span style="color: #27ae60; font-size: 11px; font-weight: bold; display: block; margin-top: 4px;">🎉 ¡La empresa se comunicará contigo!</span>`;
@@ -278,30 +274,28 @@ function aplicarFiltrosVacantes(textoBusqueda) {
     feedEmpleos.innerHTML = ""; 
 
     let vacantesFiltradas = vacantesCargadas;
-    const miProfesion = usuarioActivo.profesion ? usuarioActivo.profesion.toLowerCase().trim() : "";
+    const termino = textoBusqueda ? textoBusqueda.toLowerCase().trim() : "";
 
-    if (textoBusqueda !== "") {
+    if (termino !== "") {
         vacantesFiltradas = vacantesCargadas.filter(v => 
-            (v.cargo && v.cargo.toLowerCase().includes(textoBusqueda)) ||
-            (v.descripcion && v.descripcion.toLowerCase().includes(textoBusqueda))
-        );
-    } 
-    else if (miProfesion !== "") {
-        vacantesFiltradas = vacantesCargadas.filter(v => 
-            (v.cargo && v.cargo.toLowerCase().includes(miProfesion)) ||
-            (v.descripcion && v.descripcion.toLowerCase().includes(miProfesion))
+            (v.cargo && v.cargo.toLowerCase().includes(termino)) ||
+            (v.descripcion && v.descripcion.toLowerCase().includes(termino)) ||
+            (v.ubicacion && v.ubicacion.toLowerCase().includes(termino))
         );
     }
 
     if (!vacantesFiltradas || vacantesFiltradas.length === 0) {
-        feedEmpleos.innerHTML = `<div style="background: #fff; padding: 30px; text-align: center; border-radius: 8px; border: 1px dashed #ccc; color: #666;">No hay empleos que coincidan.</div>`;
+        feedEmpleos.innerHTML = `
+            <div style="background: #fff; padding: 30px; text-align: center; border-radius: 8px; border: 1px solid #e1e8ed; margin-top: 15px;">
+                <p style="color: #7f8c8d; font-size: 15px; margin-bottom: 15px;">🔍 No encontramos vacantes que coincidan con "${textoBusqueda}".</p>
+                <button onclick="restaurarTodasLasVacantes()" style="background: #6f42c1; color: white; border: none; padding: 10px 20px; border-radius: 8px; cursor: pointer; font-weight: bold; font-size: 14px;">Ver todas las vacantes</button>
+            </div>`;
         return;
     }
 
     vacantesFiltradas.forEach(v => {
         let botonAccion = `<button onclick="postularse(${v.id_vacante})" style="background: #3498db; color: white; border: none; padding: 8px 15px; border-radius: 5px; cursor: pointer; font-weight: bold;">Postularme</button>`;
         
-        // Comprobación estricta y segura convirtiendo a números
         if (misPostulacionesIDs.map(Number).includes(Number(v.id_vacante))) {
             botonAccion = `<button disabled style="background: #95a5a6; color: white; border: none; padding: 8px 15px; border-radius: 5px; cursor: not-allowed; font-weight: bold;">✅ Ya Postulado</button>`;
         }
@@ -317,6 +311,12 @@ function aplicarFiltrosVacantes(textoBusqueda) {
                 </div>
             </div>`;
     });
+}
+
+function restaurarTodasLasVacantes() {
+    const inputBusqueda = document.getElementById('input-busqueda');
+    if (inputBusqueda) inputBusqueda.value = '';
+    aplicarFiltrosVacantes('');
 }
 
 function postularse(idVacante) {

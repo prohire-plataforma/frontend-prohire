@@ -58,7 +58,8 @@ document.addEventListener("DOMContentLoaded", () => {
                 body: JSON.stringify(datosActualizados)
             })
             .then(async respuesta => {
-                if (!respuesta.ok) throw new Error('Error al actualizar la foto');
+                const texto = await respuesta.text();
+                if (!respuesta.ok) throw new Error(texto || 'Error al actualizar la foto');
                 
                 usuarioActivo.foto_perfil = fotoBase64;
                 localStorage.setItem('usuarioActivo', JSON.stringify(usuarioActivo));

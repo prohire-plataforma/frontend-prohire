@@ -57,9 +57,8 @@ document.addEventListener("DOMContentLoaded", () => {
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(datosActualizados)
             })
-            .then(async respuesta => {
-                const texto = await respuesta.text();
-                if (!respuesta.ok) throw new Error(texto || 'Error al actualizar la foto');
+            .then(respuesta => {
+                if (!respuesta.ok) throw new Error('Error al actualizar la foto');
                 
                 usuarioActivo.foto_perfil = fotoBase64;
                 localStorage.setItem('usuarioActivo', JSON.stringify(usuarioActivo));
@@ -176,9 +175,10 @@ async function guardarPerfilEnBD(e, usuarioActual, idProfesional) {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(datosActualizados)
     })
-    .then(async respuesta => {
-        const texto = await respuesta.text();
-        if (!respuesta.ok) throw new Error(texto || 'Error al actualizar');
+    .then(respuesta => {
+        if (!respuesta.ok) {
+            throw new Error('Error al actualizar en el servidor');
+        }
         
         usuarioActual.email = nuevoEmail;
         usuarioActual.password = nuevaPassword;
@@ -192,6 +192,7 @@ async function guardarPerfilEnBD(e, usuarioActual, idProfesional) {
         location.reload();
     })
     .catch(error => {
+        console.error("Detalle:", error);
         alert("⚠️ No se pudo actualizar el perfil: " + error.message);
     });
 }

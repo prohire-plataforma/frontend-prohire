@@ -161,8 +161,10 @@ async function guardarPerfilEnBD(e, usuarioActual, idProfesional) {
 
     const datosActualizados = {
         id_usuario: Number(idProfesional),
+        nombre: usuarioActual.nombre || "",          // <-- Campo obligatorio añadido
         email: nuevoEmail,
         password: nuevaPassword,
+        rol: usuarioActual.rol || "profesional",     // <-- Campo obligatorio añadido
         profesion: nuevaProfesion,
         telefono: nuevoTelefono,
         cv_documento: cvFinal,
@@ -180,8 +182,10 @@ async function guardarPerfilEnBD(e, usuarioActual, idProfesional) {
             throw new Error('Error al actualizar en el servidor');
         }
         
+        usuarioActual.nombre = usuarioActual.nombre || "";
         usuarioActual.email = nuevoEmail;
         usuarioActual.password = nuevaPassword;
+        usuarioActual.rol = usuarioActual.rol || "profesional";
         usuarioActual.profesion = nuevaProfesion;
         usuarioActual.telefono = nuevoTelefono;
         usuarioActual.cv_documento = cvFinal;
